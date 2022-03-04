@@ -6,7 +6,6 @@ export interface loginResponse
 
 export interface tokenResponse
 {
-    accessToken: string,
-    refreshToken: string,
-    userName: string
+    access_token: string,
+    refresh_token: string
 }

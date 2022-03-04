@@ -1,0 +1,50 @@
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.site-layout .site-layout-background {
+  background: #fff;
+}
+[data-theme="dark"] .site-layout .site-layout-background {
+  background: #141414;
+}
+
+.custom-header{
+  /* box-shadow: 0px 5px 5px -6px rgba(34, 60, 80, 0.6); */
+  padding:0 15px;
+  height:48px;
+  background: #fff;
+  display:flex;
+}
+
+.custom-header .ant-card-body{
+  padding: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
+}
+
+.custom-header .ant-card-body .name-user{
+  flex: 1 1 0%;
+  text-align: center;
+}
+
+.logout-user:hover{
+  background-color: rgba(239, 68, 68, .3);
+  
+}
+.logout-user:hover .ant-typography{
+  color: rgba(239, 68, 68, 1) !important;
+}
+
+.custom-layout-sider .ant-layout-sider-children{
+  display: flex;
+  flex-direction: column;
+}
+.custom-layout-sider .ant-layout-sider-children .navigation-menu{
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1 1 0%;
+}

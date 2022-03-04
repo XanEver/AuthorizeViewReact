@@ -1,6 +1,6 @@
-import { FC, ReactChild } from 'react';
+import React, { FC, ReactChild } from 'react';
 
-interface IAuthorizedProps 
+export interface IAuthorizedProps 
 {
     children?:
     | ReactChild
@@ -10,9 +10,9 @@ interface IAuthorizedProps
 const AuthorizedView : FC<IAuthorizedProps> = ({ children } : IAuthorizedProps) => {
 
   return (
-    <div>
+    <React.Fragment>
       { children }
-    </div>
+    </React.Fragment>
   )
 }
 

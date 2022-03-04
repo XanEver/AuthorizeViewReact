@@ -1,18 +1,22 @@
 import First from '../Pages/First/First';
 import Main from '../Pages/Main/Main';
 import Second from '../Pages/Second/Second';
-import {Navigate} from "react-router-dom";
-import { ComponentType } from "react";
+import {Navigate, RouteObject} from "react-router-dom";
+import { HomeOutlined, InfoOutlined } from '@ant-design/icons';
 
-export interface IRoutingProp {
-  path:string;
-  element: JSX.Element | ComponentType;
+
+export interface IRoutesProp extends RouteObject{
+  title?:string
+  icon?:any
+  children?:Array<IRoutesProp | RouteObject>
 }
 
-const routes:Array<IRoutingProp> = [
-    {path:'/first', element:<First/>},
-    {path:'/second', element: <Second/>},
+const routes:Array<IRoutesProp> = [
+    {path:'/', element: <Main/>,title:"Главная",caseSensitive:true,icon:<HomeOutlined />},
+    {path:'/first', element:<First/>,title:"Первая страница",icon:<InfoOutlined />},
+    {path:'/second', element: <Second/>,title:"Вторая страница"},
     {path: "/login",element: <Navigate to={"/"} />},
-    {path:'/', element: <Main/> }
+    {title:"Ну типа саб элемент",children:[{path:'/anyPage',title:"саб элемент"}]}
  ];
+ 
 export default routes;

@@ -8,9 +8,6 @@ src/index.tsx
 src/reportWebVitals.ts
 src/setupTests.ts
 src/Components/MenuComponent
-Pages/First
-Pages/Main
-Pages/Second
 public/
 .vscode/
 .editorconfig

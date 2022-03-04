@@ -1,16 +1,16 @@
 import React from 'react';
 import {Button} from "antd";
 import loginApi from "../../Services/login/loginService";
-import {useCookies} from "react-cookie";
+import Cookies from 'js-cookie';
 
 function Main() {
-  const [cookies] = useCookies(["accessToken"])
+  
     const checkToken = async ():Promise<void> => {
-      const res = await loginApi.validate(cookies.accessToken)
+      const access_token = Cookies.get("access_token")
+
       //@ts-ignore
-      if(res?.result !== true){
-        document.location.href = '/'
-      }
+      await loginApi.validate(access_token)
+      
     }
   
     return (

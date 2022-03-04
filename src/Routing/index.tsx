@@ -1,24 +1,15 @@
-import React from 'react';
-import { Route, Routes} from 'react-router-dom'
-import {IRoutingProp} from "./routs";
+import { RouteObject, useRoutes } from 'react-router-dom'
 
 
 export interface IRouting {
-    routes:Array<IRoutingProp>
+    routes:Array<RouteObject>
 }
 
 function Routing({routes}:IRouting)
 {
-    return(
-        <Routes>
-            {
-              routes.filter(elem => !!elem.element).map((route,i) => {
-                return <Route key={i} {...route}/>
-              })
-            }
-        </Routes>
-      
-    );   
+  let elements = useRoutes(routes)
+    
+  return elements
 }
 
 export default Routing;

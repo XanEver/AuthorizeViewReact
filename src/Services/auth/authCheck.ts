@@ -1,23 +1,31 @@
 import jwt_decode, { JwtPayload } from "jwt-decode"
 import loginApi from "../login/loginService";
 
+export enum ExpiredTokenEnum{Expired,Alive,None}
+
+type ExpiredTokenStrings = keyof typeof ExpiredTokenEnum
+
 const AuthCheckToken = {
-  checkAccessToken:async (accessToken:string | undefined):Promise<boolean> => { 
-    if(accessToken !== undefined){
-      const jwtToken : JwtPayload = jwt_decode(accessToken)
-      return jwtToken?.exp !== undefined && jwtToken?.exp > Math.floor(new Date().getTime() / 1000);
+  checkAccessToken:async (access_token:string | undefined,refresh_token:string | undefined):Promise<ExpiredTokenStrings> => { 
+    if(access_token !== undefined){
+      const jwtToken : JwtPayload = jwt_decode(access_token)
+      if(jwtToken?.exp !== undefined && jwtToken?.exp > Math.floor(new Date().getTime() / 1000)){
+        return "Alive"
+      }
     }
-    return false;
+    if(refresh_token !== undefined){
+      return "Expired"
+    }
+    return "None"
   },
-  refreshToken: async (refreshToken:string | undefined):Promise<{ accessToken: string; refreshToken: string; userName: string }> => {
-    if(refreshToken !== undefined){
-      const newTokens = await loginApi.refresh(refreshToken).then(e => e)
+  refresh_token: async (refresh_token:string | undefined):Promise<{ access_token: string; refresh_token: string; }> => {
+    if(refresh_token !== undefined){
+      const newTokens = await loginApi.refresh(refresh_token).then(e => e)
       return newTokens.result;
     }
+    document.location.href = '/'
     throw new Error("Токен обновления либо отсутствует, либо неверный")
-  },
-  validate: async (accessToken:string) => {
-    const valid = await loginApi.validate(accessToken)
+    
   }
 }
 
