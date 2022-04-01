@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, {  AxiosResponse } from 'axios';
 import AuthCheckToken from '../auth/authCheck';
 import { HttpStatusCode } from './HttpStatusEnum';
 import { loginResponse } from './loginResponse';
@@ -10,22 +10,22 @@ const getAuthTokens = ():ICookieProps => {
   return Object.fromEntries(document.cookie.split(";").map(e => e.trim().split("=")))
 }
 
-export const instance = axios.create({
-  baseURL: 'https://auth.corp.tatneft.ru/api/',
+export const AxiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_API_URI || 'https://auth.corp.tatneft.ru/api/',
   timeout: 15000,
 });
 
-interface ICookieProps{
-  [key:string]:string | undefined,
-  access_token?:string,
-  refresh_token?:string
+type CookieKeys = "access_token" | "refresh_token"
+
+type ICookieProps = {
+  [k in CookieKeys]:string
 }
 
-instance.interceptors.request.use(
+AxiosInstance.interceptors.request.use(
   (config) => {
     const { access_token } = getAuthTokens()
     if(access_token !== undefined){
-      // @ts-ignore
+      //@ts-ignore
       config.headers["Authorization"] = `Bearer ${access_token}`
     }
     return config;
@@ -35,32 +35,31 @@ instance.interceptors.request.use(
   }
 )
 
-instance.interceptors.response.use(
+AxiosInstance.interceptors.response.use(
   (config) => {
     return config
   },
-  (error) =>{
+  async (error) =>{
     let cookies:ICookieProps = Object.fromEntries(document.cookie.split(";").map(e => e.trim().split("=")))
     switch (error.response.status) {
       case HttpStatusCode.Unauthorized:
        try {
          const date = new Date()
          date.setMinutes(date.getMinutes() + 30)
-          AuthCheckToken.refresh_token(cookies.refresh_token).then(tokens => {
-            Object.keys(tokens).map((nameToken:keyof ICookieProps) => {
-              //@ts-ignore
-              return Cookies.set(nameToken,tokens[nameToken],{
+          await AuthCheckToken.refresh_token(cookies.refresh_token).then((tokens) => {
+            for(let [key, value] of Object.entries(tokens)){
+              Cookies.set(key,value,{
                 secure:true,
-                expires:nameToken === "refresh_token" ? new Date().getDay() + 30 : date,
-                sameSite:"strict"
+                sameSite:"strict",
+                expires:(key as CookieKeys) === 'refresh_token' ? new Date().getDay() + 30 : date
               })
-            })
+            }
           })
           return true
        } catch (error) {
          document.location.href = "/"
        }
-      break;
+       return
       default:
         break;
     }
@@ -70,10 +69,10 @@ instance.interceptors.response.use(
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => instance.get(url).then(responseBody),
-  post: (url: string, body: {}) => instance.post(url, body).then(responseBody),
-  put: (url: string, body: {}) => instance.put(url, body).then(responseBody),
-  delete: (url: string) => instance.delete(url).then(responseBody),
+  get: (url: string) => AxiosInstance.get(url).then(responseBody),
+  post: (url: string, body: {}) => AxiosInstance.post(url, body).then(responseBody),
+  put: (url: string, body: {}) => AxiosInstance.put(url, body).then(responseBody),
+  delete: (url: string) => AxiosInstance.delete(url).then(responseBody),
 };
 
 export interface IRefreshToken{

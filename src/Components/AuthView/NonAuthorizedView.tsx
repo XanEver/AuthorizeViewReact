@@ -1,30 +1,29 @@
-import React from 'react'
-import {Navigate, Route, Routes} from "react-router-dom";
+import { ReactChild, FC } from 'react'
+import {Navigate, useRoutes} from "react-router-dom";
 import Login from "../../Pages/Login";
+import RediretionAuth from '../../Pages/Login/RedirectionAuth';
 
 export interface INonAuthorizedProps {
   children?:
-  | React.ReactChild
+    | ReactChild
+    | ReactChild[];
 }
 
-interface NonAuthorizedViewState {
 
+
+const NonAuthView:FC<INonAuthorizedProps> = ({children}:INonAuthorizedProps) => {
+  const routing = useRoutes([
+    {
+      path:"/",
+      element:children ? children : <RediretionAuth/>
+    },
+    {
+      path:"*",
+      element:<Navigate to={"/"} replace />
+    }
+  ])
+  return routing
 }
 
-class NonAuthorizedView extends React.Component<INonAuthorizedProps, NonAuthorizedViewState> {
-
-  constructor(props: INonAuthorizedProps) {
-    super(props);
-  }
-
-  render() {
-    return (
-        <Routes>
-          <Route path={"/"} element={<Login/>} />
-          <Route path="*" element={<Navigate to={"/"} replace={true}/>}/>
-        </Routes>
-    );
-  }
-}
-
-export default NonAuthorizedView;
+NonAuthView.displayName = "NonAuthView"
+export default NonAuthView;

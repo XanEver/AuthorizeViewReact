@@ -1,10 +1,11 @@
-import React from 'react';
-import Layout from "./Components/Layout";
+import {Fragment} from 'react';
 
 
 function App() {  
     return(
-      <Layout/> 
+      <Fragment>
+
+      </Fragment>
     )
 }
 

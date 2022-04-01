@@ -1,11 +1,11 @@
 import './login.css';
-import { Form, Input, Button, Checkbox, Row, Col, Card, message, Spin, Typography, Space, Tabs } from 'antd';
-import React, { CSSProperties, FC, HTMLAttributes, useEffect, useState } from 'react'
+import { Form, Input, Button, Checkbox, Row, Col, message, Spin, Typography, Space, Tabs } from 'antd';
+import React, { CSSProperties, FC, HTMLAttributes, ReactNode, useEffect} from 'react'
 import loginApi from "../../Services/login/loginService"
 import loginType from '../../Services/login/loginType';
 import { useCookies } from 'react-cookie';
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
-import Icon, { HomeOutlined } from '@ant-design/icons';
+import {useLocation, useNavigate} from 'react-router-dom';
+import Icon from '@ant-design/icons';
 
 const { Title: H, Text: P } = Typography
 const { TabPane: Tab } = Tabs
@@ -57,9 +57,9 @@ const LoginWrapper: FC = ({ children }) => {
   )
 }
 
-const Login: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cookies, setCookie] = useCookies(["access_token", "refresh_token"])
+const Login: FC = ({ children }) => {
+
+  const [,setCookie] = useCookies(["access_token", "refresh_token"])
   const navigate = useNavigate();
   let { search } = useLocation()
 
@@ -92,8 +92,8 @@ const Login: FC = () => {
     if (token.success) {
       const date = new Date();
       date.setDate(date.getHours() + ((60 * 60 * 1000) / 2))
-      setCookie('access_token', token.result.access_token, { maxAge: 60 * 30, sameSite: "strict", secure: true })
-      setCookie('refresh_token', token.result.refresh_token, { maxAge: 2592000, sameSite: "strict", secure: true })
+      setCookie('access_token', token.result["accessToken"], { maxAge: 60 * 30, sameSite: "strict", secure: true })
+      setCookie('refresh_token', token.result["refreshToken"], { maxAge: 2592000, sameSite: "strict", secure: true })
       message.destroy();
       navigate(0)
     }
@@ -113,8 +113,8 @@ const Login: FC = () => {
     }
   }, [search])
 
-  // @ts-ignore
-  const AuthWrapper = ({ children }) => {
+  
+  function AuthWrapper({ children }:{children:ReactNode}){
     return (
         <Row style={{ width: "600px", height: "fit-content",border:"1px solid #f0f0f0" }}>
           <Col style={{ display: "flex", width: "100%", justifyContent: "center", margin: 15 }}>

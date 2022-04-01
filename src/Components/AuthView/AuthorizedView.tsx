@@ -1,4 +1,4 @@
-import React, { FC, ReactChild } from 'react';
+import { FC, ReactChild,Fragment } from 'react';
 
 export interface IAuthorizedProps 
 {
@@ -10,13 +10,13 @@ export interface IAuthorizedProps
 const AuthorizedView : FC<IAuthorizedProps> = ({ children } : IAuthorizedProps) => {
 
   return (
-    <React.Fragment>
+    <Fragment>
       { children }
-    </React.Fragment>
+    </Fragment>
   )
 }
 
  
 
-
+AuthorizedView.displayName = "AuthorizedView"
 export default AuthorizedView;

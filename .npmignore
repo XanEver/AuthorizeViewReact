@@ -2,13 +2,14 @@ src/Pages/First/
 src/Pages/Main
 src/Pages/Second
 src/Index/routs.tsx
+src/Routing/routs.tsx
 src/App.tsx
 src/logo.svg
 src/index.tsx
 src/reportWebVitals.ts
 src/setupTests.ts
-src/Components/MenuComponent
 public/
+.env
 .vscode/
 .editorconfig
 .tsconfig.json

@@ -3,3 +3,5 @@ export default interface loginType{
         Password : string;
         IsDomainAccount: Boolean;
     }
+
+
